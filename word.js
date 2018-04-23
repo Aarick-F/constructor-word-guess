@@ -19,10 +19,12 @@ function Word(word) {
   }
 
   this.update = function() {
-    let display = "";
+    let printedWord = "";
     this.letters.forEach(letter => {
-      display += letter.getCharacter;
+      printedWord += letter.getCharacter() + " ";
     });
-    return display;
+    return printedWord;
   }
 }
+
+module.exports = Word;
