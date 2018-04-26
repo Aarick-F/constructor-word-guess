@@ -11,9 +11,10 @@ const wordBank = [
 
 let guesses;
 let pickedWords;
+let word;
+let pickedWord;
 
 function init() {
-  guesses = 9;
   pickedWords = [];
   console.log("Hello, and welcome to Word Guess in Space!");
   console.log("------------------------------------------");
@@ -21,25 +22,18 @@ function init() {
 }
 
 function playGame() {
-  let pickedWord = "";
-  let word;
+  pickedWord = "";
+  guesses = 9;
   if(pickedWords.length < wordBank.length) {
     pickedWord = getWord();
   } else {
     // WIN CONDITION
+    console.log("You know a lot about your celestial neighborhood. Cheers!");
   }
-  if(guesses > 0 && pickedWord) {
+  if(pickedWord) {
     word = new Word(pickedWord);
     word.makeLetters();
-    inquirer.prompt([
-      {
-        name: "guessedLetter",
-        message: word.update() + 
-                "\nGuess a letter!"
-      }
-    ]).then(data => {
-      console.log(data.guessedLetter);
-    });
+    makeGuess();
   }
 }
 
@@ -52,6 +46,29 @@ function getWord() {
   } else {
     getWord();
   }
+}
+
+function makeGuess() {
+  let checker = [];
+  inquirer.prompt([
+    {
+      name: "guessedLetter",
+      message: word.update() + 
+              "\nGuess a letter!"
+    }
+  ]).then(data => {
+    word.letters.forEach(letter => {
+      letter.checkLetter(data.guessedLetter);
+      checker.push(letter.getCharacter());
+    });
+    if(guesses > 0 && checker.indexOf("_") !== -1) {
+      makeGuess();
+    } else {
+      console.log("CONGRATULATIONS! YOU GOT THE WORD!");
+      console.log(word.update());
+      playGame();
+    }
+  });
 }
 
 init();

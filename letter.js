@@ -13,8 +13,6 @@ function Letter(letter) {
   this.checkLetter = function(guess) {
     if(guess === this.letter) {
       this.isGuessed = true;
-    } else {
-      this.isGuessed = false;
     }
   }
 }
